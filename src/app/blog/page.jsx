@@ -4,7 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 async function getData() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/posts`, {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/";
+  clg(`API URL: ${apiUrl}`);
+  const res = await fetch(`${apiUrl}api/posts`, {
     cache: "no-store",
   });
 
