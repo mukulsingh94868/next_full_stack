@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   // Fetch contacts data
   const { data: contacts, mutate: mutateContacts, error: contactError, isLoading: contactLoading } = useSWR(
-    `http://localhost:3001/api/contact`,
+    `/api/contact`,
     fetcher
   );
 
