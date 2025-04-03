@@ -21,15 +21,15 @@ const Login = ({ url }) => {
     return <p>Loading...</p>;
   }
 
-  // if (session.status === "authenticated") {
-  //   router?.push("/dashboard");
-  // }
+  if (session.status === "authenticated") {
+    router?.push("/dashboard");
+  }
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/dashboard");
-    }
-  }, [status, router]);
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     router.push("/dashboard");
+  //   }
+  // }, [status, router]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
