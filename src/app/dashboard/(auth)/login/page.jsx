@@ -1,14 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import styles from "./page.module.css";
-import { getProviders, signIn, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import styles from "./page.module.css";
 
 const Login = ({ url }) => {
   const session = useSession();
   const router = useRouter();
-  const params = useSearchParams();
+  const params = useParams();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
