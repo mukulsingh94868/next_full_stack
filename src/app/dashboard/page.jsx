@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
@@ -8,41 +7,21 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const Dashboard = () => {
-
-  //OLD WAY TO FETCH DATA
-
-  // const [data, setData] = useState([]);
-  // const [err, setErr] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     setIsLoading(true);
-  //     const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
-  //       cache: "no-store",
-  //     });
-
-  //     if (!res.ok) {
-  //       setErr(true);
-  //     }
-
-  //     const data = await res.json()
-
-  //     setData(data);
-  //     setIsLoading(false);
-  //   };
-  //   getData()
-  // }, []);
-
   const session = useSession();
-
   const router = useRouter();
 
-  //NEW WAY TO FETCH DATA
+  // Fetch function
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-  const { data, mutate, error, isLoading } = useSWR(
-    `/api/posts?username=${session?.data?.user.name}`,
+  // Fetch posts data
+  const { data: posts, mutate: mutatePosts, error: postError, isLoading: postLoading } = useSWR(
+    session?.data?.user?.name ? `/api/posts?username=${session.data.user.name}` : null,
+    fetcher
+  );
+
+  // Fetch contacts data
+  const { data: contacts, mutate: mutateContacts, error: contactError, isLoading: contactLoading } = useSWR(
+    `http://localhost:3001/api/contact`,
     fetcher
   );
 
@@ -72,8 +51,8 @@ const Dashboard = () => {
           username: session.data.user.name,
         }),
       });
-      mutate();
-      e.target.reset()
+      mutatePosts();
+      e.target.reset();
     } catch (err) {
       console.log(err);
     }
@@ -84,7 +63,7 @@ const Dashboard = () => {
       await fetch(`/api/posts/${id}`, {
         method: "DELETE",
       });
-      mutate();
+      mutatePosts();
     } catch (err) {
       console.log(err);
     }
@@ -94,9 +73,9 @@ const Dashboard = () => {
     return (
       <div className={styles.container}>
         <div className={styles.posts}>
-          {isLoading
-            ? "loading"
-            : data?.map((post) => (
+          {postLoading
+            ? "Loading posts..."
+            : posts?.map((post) => (
               <div className={styles.post} key={post._id}>
                 <div className={styles.imgContainer}>
                   <Image src={post.img} alt="" width={200} height={100} />
@@ -124,6 +103,33 @@ const Dashboard = () => {
           ></textarea>
           <button className={styles.button}>Send</button>
         </form>
+
+        {/* Contact Listing Table */}
+        <div className={styles.tableData}>
+          <h2>Contact Listing</h2>
+          {contactLoading ? (
+            <p>Loading contacts...</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                {contacts?.map((contact) => (
+                  <tr key={contact._id}>
+                    <td>{contact.name}</td>
+                    <td>{contact.email}</td>
+                    <td>{contact.message}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     );
   }
