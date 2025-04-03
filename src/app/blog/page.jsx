@@ -5,7 +5,7 @@ import Image from "next/image";
 
 async function getData() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/";
-  clg(`API URL: ${apiUrl}`);
+  console.log(`API URL: ${apiUrl}`);
   const res = await fetch(`${apiUrl}api/posts`, {
     cache: "no-store",
   });
