@@ -4,7 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 async function getData(id) {
-  const res = await fetch(`${process.env.NEXT_AUTH_URL}api/posts/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/posts/${id}`, {
     cache: "no-store",
   });
 
